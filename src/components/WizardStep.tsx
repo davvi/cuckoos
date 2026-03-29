@@ -45,6 +45,7 @@ export function WizardStep({ question, value, onAnswer }: WizardStepProps) {
           onChange={(val) => val && onAnswer(val)}
           placeholder="Select an option"
           allowDeselect={false}
+          searchable={question.options.length > 10}
         />
       )}
 

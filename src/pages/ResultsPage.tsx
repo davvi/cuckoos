@@ -5,7 +5,6 @@ import type { Answers } from "../engine/types";
 import { calculateLifespan } from "../engine/calculator";
 import { LifespanChart } from "../components/LifespanChart";
 import { SuggestionCard } from "../components/SuggestionCard";
-import { BASE_LIFESPAN } from "../data/constants";
 
 function loadAnswers(): Answers {
   try {
@@ -64,9 +63,9 @@ export function ResultsPage() {
         <Group gap="lg">
           <div style={{ textAlign: "center" }}>
             <Text size="xs" c="dimmed">
-              Global average
+              {answers.country ? `${answers.country} avg` : "Global avg"}
             </Text>
-            <Text fw={600}>{BASE_LIFESPAN}</Text>
+            <Text fw={600}>{result.baseLifespan}</Text>
           </div>
           <div style={{ textAlign: "center" }}>
             <Text size="xs" c="dimmed">

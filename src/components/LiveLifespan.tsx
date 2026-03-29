@@ -2,6 +2,7 @@ import { Group, Text } from "@mantine/core";
 import { useEffect, useRef, useState } from "react";
 import { calculateLifespan } from "../engine/calculator";
 import { BASE_LIFESPAN } from "../data/constants";
+import { countryData } from "../data/countries";
 import type { Answers } from "../engine/types";
 
 interface LiveLifespanProps {
@@ -11,8 +12,13 @@ interface LiveLifespanProps {
 export function LiveLifespan({ answers }: LiveLifespanProps) {
   const hasAnyAnswer = Object.keys(answers).length > 0;
   const result = hasAnyAnswer ? calculateLifespan(answers) : null;
-  const predicted = result?.predictedLifespan ?? BASE_LIFESPAN;
+  const countryAnswer = answers.country as string | undefined;
+  const baseline = countryAnswer
+    ? (countryData[countryAnswer]?.lifespan ?? BASE_LIFESPAN)
+    : BASE_LIFESPAN;
+  const predicted = result?.predictedLifespan ?? baseline;
   const adjustment = result?.totalModifier ?? 0;
+  const baselineLabel = countryAnswer ? `${countryAnswer} avg` : "global avg";
 
   // Animate the number whenever it changes
   const [flash, setFlash] = useState(false);
@@ -56,10 +62,10 @@ export function LiveLifespan({ answers }: LiveLifespanProps) {
         <Text size="sm" c="dimmed" lh={1.2}>
           years predicted
         </Text>
-        {result && (
+        {result && adjustment !== 0 && (
           <Text size="xs" c={adjustColor} lh={1.2}>
             {adjustment > 0 ? "+" : ""}
-            {adjustment} vs global avg
+            {adjustment} vs {baselineLabel}
           </Text>
         )}
       </div>

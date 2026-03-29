@@ -1,4 +1,5 @@
 import { BASE_LIFESPAN } from "../data/constants";
+import { countryData } from "../data/countries";
 import { questions } from "../data/questions";
 import { suggestionMap } from "../data/suggestions";
 import type { Answers, FactorBreakdown, LifespanResult, Suggestion } from "./types";
@@ -85,10 +86,18 @@ function generateSuggestions(answers: Answers, factors: FactorBreakdown[]): Sugg
 }
 
 export function calculateLifespan(answers: Answers): LifespanResult {
+  // Country sets the baseline; all other factors are modifiers on top of it
+  const countryAnswer = answers.country as string | undefined;
+  const baseLifespan = countryAnswer
+    ? (countryData[countryAnswer]?.lifespan ?? BASE_LIFESPAN)
+    : BASE_LIFESPAN;
+
   const factors: FactorBreakdown[] = [];
   let totalModifier = 0;
 
   for (const q of questions) {
+    if (q.id === "country") continue; // country is the baseline, not a factor
+
     const answer = answers[q.id];
     if (answer === undefined) continue;
 
@@ -112,9 +121,9 @@ export function calculateLifespan(answers: Answers): LifespanResult {
   const suggestions = generateSuggestions(answers, factors);
 
   return {
-    baseLifespan: BASE_LIFESPAN,
+    baseLifespan,
     totalModifier: Math.round(totalModifier * 10) / 10,
-    predictedLifespan: Math.round((BASE_LIFESPAN + totalModifier) * 10) / 10,
+    predictedLifespan: Math.round((baseLifespan + totalModifier) * 10) / 10,
     factors,
     suggestions,
   };

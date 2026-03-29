@@ -1,6 +1,21 @@
 import type { Question } from "../engine/types";
+import { countryOptions } from "./countries";
 
 export const questions: Question[] = [
+  {
+    id: "country",
+    category: "Baseline",
+    text: "Where do you live?",
+    description: "Your country sets the baseline life expectancy for your calculation.",
+    type: "select",
+    options: countryOptions,
+    citations: [
+      {
+        label: "WHO Global Health Observatory — Life expectancy at birth",
+        url: "https://www.who.int/data/gho/data/indicators/indicator-details/GHO/life-expectancy-at-birth-(years)",
+      },
+    ],
+  },
   {
     id: "sex",
     category: "Baseline",
