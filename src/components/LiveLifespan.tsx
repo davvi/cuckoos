@@ -32,43 +32,67 @@ export function LiveLifespan({ answers }: LiveLifespanProps) {
     }
   }, [predicted]);
 
+  const hale = countryAnswer ? countryData[countryAnswer]?.hale : undefined;
   const adjustColor = adjustment > 0 ? "teal" : adjustment < 0 ? "red" : "dimmed";
 
   return (
     <Group
       justify="center"
       align="baseline"
-      gap="xs"
+      gap="xl"
       py="sm"
       style={{
         borderBottom: "1px solid var(--mantine-color-gray-2)",
         transition: "all 0.3s ease",
       }}
     >
-      <Text
-        fw={700}
-        style={{
-          fontSize: "2.5rem",
-          lineHeight: 1,
-          color: flash
-            ? `var(--mantine-color-teal-6)`
-            : "var(--mantine-color-gray-9)",
-          transition: "color 0.3s ease",
-        }}
-      >
-        {predicted}
-      </Text>
-      <div>
-        <Text size="sm" c="dimmed" lh={1.2}>
-          years predicted
+      {/* Predicted lifespan */}
+      <Group align="baseline" gap="xs">
+        <Text
+          fw={700}
+          style={{
+            fontSize: "2.5rem",
+            lineHeight: 1,
+            color: flash
+              ? `var(--mantine-color-teal-6)`
+              : "var(--mantine-color-gray-9)",
+            transition: "color 0.3s ease",
+          }}
+        >
+          {predicted}
         </Text>
-        {result && adjustment !== 0 && (
-          <Text size="xs" c={adjustColor} lh={1.2}>
-            {adjustment > 0 ? "+" : ""}
-            {adjustment} vs {baselineLabel}
+        <div>
+          <Text size="sm" c="dimmed" lh={1.2}>
+            years predicted
           </Text>
-        )}
-      </div>
+          {result && adjustment !== 0 && (
+            <Text size="xs" c={adjustColor} lh={1.2}>
+              {adjustment > 0 ? "+" : ""}
+              {adjustment} vs {baselineLabel}
+            </Text>
+          )}
+        </div>
+      </Group>
+
+      {/* Country HALE — shown only once country is selected */}
+      {hale !== undefined && (
+        <Group align="baseline" gap="xs">
+          <Text
+            fw={700}
+            style={{ fontSize: "2.5rem", lineHeight: 1, color: "var(--mantine-color-gray-5)" }}
+          >
+            {hale}
+          </Text>
+          <div>
+            <Text size="sm" c="dimmed" lh={1.2}>
+              healthy years (HALE)
+            </Text>
+            <Text size="xs" c="dimmed" lh={1.2}>
+              {countryAnswer} avg
+            </Text>
+          </div>
+        </Group>
+      )}
     </Group>
   );
 }

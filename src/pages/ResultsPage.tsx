@@ -5,6 +5,7 @@ import type { Answers } from "../engine/types";
 import { calculateLifespan } from "../engine/calculator";
 import { LifespanChart } from "../components/LifespanChart";
 import { SuggestionCard } from "../components/SuggestionCard";
+import { CountryProfile } from "../components/CountryProfile";
 
 function loadAnswers(): Answers {
   try {
@@ -26,8 +27,7 @@ export function ResultsPage() {
   }
 
   const result = useMemo(() => calculateLifespan(answers), [answers]);
-
-  if (!hasAnswers) return null;
+  const countryName = answers.country as string | undefined;
 
   const ringPercent = Math.min(100, Math.max(0, (result.predictedLifespan / 100) * 100));
   const ringColor = result.totalModifier >= 0 ? "teal" : "red";
@@ -40,6 +40,8 @@ export function ResultsPage() {
 
   return (
     <Stack gap="xl" py="md">
+
+      {/* ── Personal prediction ── */}
       <Stack align="center" gap="sm">
         <Title order={2} fw={500}>
           Your Predicted Lifespan
@@ -63,7 +65,7 @@ export function ResultsPage() {
         <Group gap="lg">
           <div style={{ textAlign: "center" }}>
             <Text size="xs" c="dimmed">
-              {answers.country ? `${answers.country} avg` : "Global avg"}
+              {countryName ? `${countryName} avg` : "Global avg"}
             </Text>
             <Text fw={600}>{result.baseLifespan}</Text>
           </div>
@@ -81,8 +83,26 @@ export function ResultsPage() {
 
       <Divider />
 
-      <LifespanChart factors={result.factors} />
+      {/* ── WHO country profile ── */}
+      {countryName && (
+        <>
+          <CountryProfile countryName={countryName} />
+          <Divider />
+        </>
+      )}
 
+      {/* ── Personal factor breakdown ── */}
+      <div>
+        <Title order={3} fw={500} mb="sm">
+          Your factor breakdown
+        </Title>
+        <Text size="sm" c="dimmed" mb="md">
+          How each of your answers adjusts from the {countryName ?? "global"} baseline.
+        </Text>
+        <LifespanChart factors={result.factors} />
+      </div>
+
+      {/* ── Suggestions ── */}
       {result.suggestions.length > 0 && (
         <>
           <Divider />
@@ -109,7 +129,7 @@ export function ResultsPage() {
       </Group>
 
       <Text size="xs" c="dimmed" ta="center">
-        This is for educational purposes only and not medical advice.
+        Data sourced from WHO Global Health Observatory. For educational purposes only — not medical advice.
       </Text>
     </Stack>
   );
