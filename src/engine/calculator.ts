@@ -1,4 +1,4 @@
-import { BASE_LIFESPAN } from "../data/constants";
+import { BASE_HEALTHY_YEARS, BASE_LIFESPAN } from "../data/constants";
 import { countryData } from "../data/countries";
 import { questions } from "../data/questions";
 import { suggestionMap } from "../data/suggestions";
@@ -53,16 +53,64 @@ function interpolate(points: [number, number][], x: number): number {
   return 0;
 }
 
-function getModifier(questionId: string, answer: string | number, type: string): number {
+function roundToTenth(value: number): number {
+  return Math.round(value * 10) / 10;
+}
+
+function getSexModifier(countryName: string | undefined, answer: string): number | undefined {
+  const country = countryName ? countryData[countryName] : undefined;
+  if (!country) return undefined;
+
+  if (answer === "male") return country.lifespanMale - country.lifespan;
+  if (answer === "female") return country.lifespanFemale - country.lifespan;
+
+  return undefined;
+}
+
+function getSexHealthyYearsModifier(countryName: string | undefined, answer: string): number | undefined {
+  const country = countryName ? countryData[countryName] : undefined;
+  if (!country || country.lifespan <= 0) return undefined;
+
+  const sexLifespan =
+    answer === "male" ? country.lifespanMale : answer === "female" ? country.lifespanFemale : undefined;
+
+  if (sexLifespan === undefined) return undefined;
+
+  const healthyYearsRatio = country.hale / country.lifespan;
+  return sexLifespan * healthyYearsRatio - country.hale;
+}
+
+function getModifier(questionId: string, answer: string | number, type: string, answers: Answers): number {
   if (type === "slider") {
     const curve = sliderCurves[questionId];
     if (curve) return interpolate(curve, answer as number);
     return 0;
   }
 
+  if (questionId === "sex" && typeof answer === "string") {
+    const countryAnswer = answers.country as string | undefined;
+    const sexModifier = getSexModifier(countryAnswer, answer);
+    if (sexModifier !== undefined) return sexModifier;
+  }
+
   const question = questions.find((q) => q.id === questionId);
   const option = question?.options?.find((o) => o.value === answer);
   return option?.modifier ?? 0;
+}
+
+function getHealthyYearsModifier(
+  questionId: string,
+  answer: string | number,
+  answers: Answers,
+  modifier: number,
+): number {
+  if (questionId === "sex" && typeof answer === "string") {
+    const countryAnswer = answers.country as string | undefined;
+    const sexHealthyModifier = getSexHealthyYearsModifier(countryAnswer, answer);
+    if (sexHealthyModifier !== undefined) return sexHealthyModifier;
+  }
+
+  return modifier;
 }
 
 function generateSuggestions(answers: Answers, factors: FactorBreakdown[]): Suggestion[] {
@@ -113,12 +161,13 @@ function generateSuggestions(answers: Answers, factors: FactorBreakdown[]): Sugg
 export function calculateLifespan(answers: Answers): LifespanResult {
   // Country sets the baseline; all other factors are modifiers on top of it
   const countryAnswer = answers.country as string | undefined;
-  const baseLifespan = countryAnswer
-    ? (countryData[countryAnswer]?.lifespan ?? BASE_LIFESPAN)
-    : BASE_LIFESPAN;
+  const country = countryAnswer ? countryData[countryAnswer] : undefined;
+  const baseLifespan = country?.lifespan ?? BASE_LIFESPAN;
+  const baseHealthyYears = country?.hale ?? BASE_HEALTHY_YEARS;
 
   const factors: FactorBreakdown[] = [];
   let totalModifier = 0;
+  let totalHealthyYearsModifier = 0;
 
   for (const q of questions) {
     if (q.id === "country") continue; // country is the baseline, not a factor
@@ -126,8 +175,10 @@ export function calculateLifespan(answers: Answers): LifespanResult {
     const answer = answers[q.id];
     if (answer === undefined) continue;
 
-    const modifier = getModifier(q.id, answer, q.type);
+    const modifier = getModifier(q.id, answer, q.type, answers);
+    const healthyYearsModifier = getHealthyYearsModifier(q.id, answer, answers, modifier);
     totalModifier += modifier;
+    totalHealthyYearsModifier += healthyYearsModifier;
 
     const displayLabel =
       q.type === "slider"
@@ -144,11 +195,18 @@ export function calculateLifespan(answers: Answers): LifespanResult {
   }
 
   const suggestions = generateSuggestions(answers, factors);
+  const predictedLifespan = baseLifespan + totalModifier;
+  const predictedHealthyYears = Math.min(
+    predictedLifespan,
+    Math.max(0, baseHealthyYears + totalHealthyYearsModifier),
+  );
 
   return {
-    baseLifespan,
-    totalModifier: Math.round(totalModifier * 10) / 10,
-    predictedLifespan: Math.round((baseLifespan + totalModifier) * 10) / 10,
+    baseLifespan: roundToTenth(baseLifespan),
+    baseHealthyYears: roundToTenth(baseHealthyYears),
+    totalModifier: roundToTenth(totalModifier),
+    predictedLifespan: roundToTenth(predictedLifespan),
+    predictedHealthyYears: roundToTenth(predictedHealthyYears),
     factors,
     suggestions,
   };

@@ -18,15 +18,14 @@ function loadAnswers(): Answers {
 
 export function ResultsPage() {
   const navigate = useNavigate();
-  const answers = useMemo(loadAnswers, []);
+  const answers = useMemo(() => loadAnswers(), []);
+  const result = useMemo(() => calculateLifespan(answers), [answers]);
   const hasAnswers = Object.keys(answers).length > 0;
 
   if (!hasAnswers) {
     navigate("/wizard", { replace: true });
     return null;
   }
-
-  const result = useMemo(() => calculateLifespan(answers), [answers]);
   const countryName = answers.country as string | undefined;
 
   const ringPercent = Math.min(100, Math.max(0, (result.predictedLifespan / 100) * 100));
@@ -68,6 +67,12 @@ export function ResultsPage() {
               {countryName ? `${countryName} avg` : "Global avg"}
             </Text>
             <Text fw={600}>{result.baseLifespan}</Text>
+          </div>
+          <div style={{ textAlign: "center" }}>
+            <Text size="xs" c="dimmed">
+              Healthy years est.
+            </Text>
+            <Text fw={600}>{result.predictedHealthyYears}</Text>
           </div>
           <div style={{ textAlign: "center" }}>
             <Text size="xs" c="dimmed">

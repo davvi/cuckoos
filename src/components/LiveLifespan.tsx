@@ -1,7 +1,6 @@
 import { Group, Text } from "@mantine/core";
-import { useEffect, useRef, useState } from "react";
 import { calculateLifespan } from "../engine/calculator";
-import { BASE_LIFESPAN } from "../data/constants";
+import { BASE_HEALTHY_YEARS, BASE_LIFESPAN } from "../data/constants";
 import { countryData } from "../data/countries";
 import type { Answers } from "../engine/types";
 
@@ -16,24 +15,17 @@ export function LiveLifespan({ answers }: LiveLifespanProps) {
   const baseline = countryAnswer
     ? (countryData[countryAnswer]?.lifespan ?? BASE_LIFESPAN)
     : BASE_LIFESPAN;
+  const baselineHealthyYears = countryAnswer
+    ? (countryData[countryAnswer]?.hale ?? BASE_HEALTHY_YEARS)
+    : BASE_HEALTHY_YEARS;
   const predicted = result?.predictedLifespan ?? baseline;
+  const predictedHealthyYears = result?.predictedHealthyYears ?? baselineHealthyYears;
   const adjustment = result?.totalModifier ?? 0;
   const baselineLabel = countryAnswer ? `${countryAnswer} avg` : "global avg";
-
-  // Animate the number whenever it changes
-  const [flash, setFlash] = useState(false);
-  const prevPredicted = useRef(predicted);
-  useEffect(() => {
-    if (predicted !== prevPredicted.current) {
-      prevPredicted.current = predicted;
-      setFlash(true);
-      const t = setTimeout(() => setFlash(false), 400);
-      return () => clearTimeout(t);
-    }
-  }, [predicted]);
-
-  const hale = countryAnswer ? countryData[countryAnswer]?.hale : undefined;
   const adjustColor = adjustment > 0 ? "teal" : adjustment < 0 ? "red" : "dimmed";
+  const healthyYearsAdjustment = predictedHealthyYears - baselineHealthyYears;
+  const healthyYearsAdjustColor =
+    healthyYearsAdjustment > 0 ? "teal" : healthyYearsAdjustment < 0 ? "red" : "dimmed";
 
   return (
     <Group
@@ -49,14 +41,12 @@ export function LiveLifespan({ answers }: LiveLifespanProps) {
       {/* Predicted lifespan */}
       <Group align="baseline" gap="xs">
         <Text
+          key={predicted}
           fw={700}
           style={{
             fontSize: "2.5rem",
             lineHeight: 1,
-            color: flash
-              ? `var(--mantine-color-teal-6)`
-              : "var(--mantine-color-gray-9)",
-            transition: "color 0.3s ease",
+            color: "var(--mantine-color-gray-9)",
           }}
         >
           {predicted}
@@ -74,22 +64,25 @@ export function LiveLifespan({ answers }: LiveLifespanProps) {
         </div>
       </Group>
 
-      {/* Country HALE — shown only once country is selected */}
-      {hale !== undefined && (
+      {/* Healthy years estimate */}
+      {baselineHealthyYears !== undefined && (
         <Group align="baseline" gap="xs">
           <Text
             fw={700}
             style={{ fontSize: "2.5rem", lineHeight: 1, color: "var(--mantine-color-gray-5)" }}
           >
-            {hale}
+            {predictedHealthyYears}
           </Text>
           <div>
             <Text size="sm" c="dimmed" lh={1.2}>
-              healthy years (HALE)
+              healthy years est.
             </Text>
-            <Text size="xs" c="dimmed" lh={1.2}>
-              {countryAnswer} avg
-            </Text>
+            {result && (
+              <Text size="xs" c={healthyYearsAdjustColor} lh={1.2}>
+                {healthyYearsAdjustment > 0 ? "+" : ""}
+                {healthyYearsAdjustment.toFixed(1)} vs {baselineLabel} HALE
+              </Text>
+            )}
           </div>
         </Group>
       )}

@@ -53,8 +53,10 @@ export interface Suggestion {
 
 export interface LifespanResult {
   baseLifespan: number;
+  baseHealthyYears: number;
   totalModifier: number;
   predictedLifespan: number;
+  predictedHealthyYears: number;
   factors: FactorBreakdown[];
   suggestions: Suggestion[];
 }
