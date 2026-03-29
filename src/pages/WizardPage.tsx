@@ -1,11 +1,13 @@
 import { Button, Group, Progress, Stack, Text } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { WizardStep } from "../components/WizardStep";
+import { LiveLifespan } from "../components/LiveLifespan";
 import { useWizard } from "../hooks/useWizard";
 
 export function WizardPage() {
   const navigate = useNavigate();
   const {
+    answers,
     activeStep,
     setAnswer,
     nextStep,
@@ -32,6 +34,8 @@ export function WizardPage() {
 
   return (
     <Stack gap="lg" py="md" maw={520} mx="auto">
+      <LiveLifespan answers={answers} />
+
       <div>
         <Group justify="space-between" mb={4}>
           <Text size="xs" c="dimmed">
