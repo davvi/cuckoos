@@ -51,20 +51,72 @@ export const suggestionMap: Record<string, Record<string, SuggestionTemplate>> =
       potentialGain: 1,
     },
   },
-  diet: {
-    poor: {
-      text: "Shifting toward a Mediterranean-style diet rich in vegetables, fruits, whole grains, and healthy fats could significantly improve your health outcomes.",
-      potentialGain: 4,
+  whole_grains: {
+    mostly_refined: {
+      text: "Switching to whole grains (oats, brown rice, whole wheat) instead of refined grains can reduce cardiovascular disease risk and improve metabolic health.",
+      potentialGain: 1,
       citations: [
         {
-          label: "Sofi et al., BMJ 2008",
-          url: "https://www.bmj.com/content/337/bmj.a1344",
+          label: "Zong et al., Circulation 2016",
+          url: "https://www.ahajournals.org/doi/10.1161/CIRCULATIONAHA.115.021101",
         },
       ],
     },
-    average: {
-      text: "Adding more fruits, vegetables, and whole grains while reducing processed foods can provide meaningful health benefits.",
+  },
+  protein_source: {
+    mostly_red_meat: {
+      text: "Replacing red meat with plant proteins (legumes, nuts), fish, or poultry is one of the most evidence-backed dietary changes for longevity.",
+      potentialGain: 2.5,
+      citations: [
+        {
+          label: "Orlich et al., JAMA Internal Medicine 2013",
+          url: "https://jamanetwork.com/journals/jamainternalmedicine/fullarticle/1710093",
+        },
+      ],
+    },
+  },
+  red_meat: {
+    regular: {
+      text: "Limiting red and processed meat to 1–2 times per week reduces risk of colorectal cancer, cardiovascular disease, and all-cause mortality.",
+      potentialGain: 0.8,
+      citations: [
+        {
+          label: "Pan et al., Archives of Internal Medicine 2012",
+          url: "https://jamanetwork.com/journals/jamainternalmedicine/fullarticle/1134845",
+        },
+      ],
+    },
+    daily: {
+      text: "Daily red or processed meat consumption is strongly linked to higher cancer and heart disease risk. Reducing to occasional (1–2x/week) can meaningfully extend your life.",
       potentialGain: 1.5,
+      citations: [
+        {
+          label: "WHO IARC — Processed meat classified as Group 1 carcinogen",
+          url: "https://www.iarc.who.int/wp-content/uploads/2018/07/pr240_E.pdf",
+        },
+      ],
+    },
+  },
+  processed_food: {
+    often: {
+      text: "Reducing ultra-processed foods and replacing them with whole foods (vegetables, legumes, whole grains) can add years to your life.",
+      potentialGain: 1.5,
+      citations: [
+        {
+          label: "Srour et al., BMJ 2019",
+          url: "https://www.bmj.com/content/365/bmj.l1949",
+        },
+      ],
+    },
+    daily: {
+      text: "Eating ultra-processed foods daily is one of the strongest predictors of early death in recent large-scale studies. Cooking whole foods at home most days is the most impactful change you can make here.",
+      potentialGain: 3,
+      citations: [
+        {
+          label: "Srour et al., BMJ 2019",
+          url: "https://www.bmj.com/content/365/bmj.l1949",
+        },
+      ],
     },
   },
   alcohol: {
@@ -119,14 +171,38 @@ export const suggestionMap: Record<string, Record<string, SuggestionTemplate>> =
       ],
     },
   },
-  exercise_minutes: {
+  cardio_minutes: {
     _low: {
-      text: "Even 150 minutes of moderate exercise per week (brisk walking) can add years to your life. Start small and build up gradually.",
+      text: "Even 150 minutes of cardio per week — 30 minutes five days a week — can add years to your life. Brisk walking counts. Start small and build gradually.",
       potentialGain: 3,
       citations: [
         {
           label: "WHO Physical Activity Guidelines",
           url: "https://www.who.int/news-room/fact-sheets/detail/physical-activity",
+        },
+      ],
+    },
+  },
+  strength_days: {
+    _low: {
+      text: "Adding just 2 days of strength training per week reduces all-cause mortality by up to 17%. Bodyweight exercises at home count — no gym required.",
+      potentialGain: 2,
+      citations: [
+        {
+          label: "Stamatakis et al., BMJ 2022",
+          url: "https://bjsm.bmj.com/content/56/13/755",
+        },
+      ],
+    },
+  },
+  vegetables_fruit: {
+    _low: {
+      text: "Eating 5+ servings of vegetables and fruit per day is associated with significantly lower risk of heart disease, stroke, and cancer. Frozen and canned count too.",
+      potentialGain: 2,
+      citations: [
+        {
+          label: "Wang et al., Circulation 2021",
+          url: "https://www.ahajournals.org/doi/10.1161/CIRCULATIONAHA.120.048996",
         },
       ],
     },

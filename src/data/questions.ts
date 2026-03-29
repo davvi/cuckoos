@@ -53,11 +53,11 @@ export const questions: Question[] = [
     ],
   },
   {
-    id: "exercise_minutes",
+    id: "cardio_minutes",
     category: "Exercise",
-    text: "How many minutes of moderate exercise per week?",
+    text: "How many minutes of cardio do you do per week?",
     description:
-      "Include brisk walking, cycling, swimming, or any activity that raises your heart rate.",
+      "Cardio (aerobic exercise) includes brisk walking, running, cycling, swimming, or anything that sustainably raises your heart rate.",
     type: "slider",
     range: { min: 0, max: 600, step: 15, unit: "min/week" },
     citations: [
@@ -66,8 +66,27 @@ export const questions: Question[] = [
         url: "https://jamanetwork.com/journals/jamainternalmedicine/fullarticle/2788473",
       },
       {
-        label: "WHO Physical Activity Guidelines",
+        label: "WHO Physical Activity Guidelines — 150–300 min/week recommended",
         url: "https://www.who.int/news-room/fact-sheets/detail/physical-activity",
+      },
+    ],
+  },
+  {
+    id: "strength_days",
+    category: "Exercise",
+    text: "How many days per week do you do strength or resistance training?",
+    description:
+      "Includes weight lifting, bodyweight exercises (push-ups, squats), resistance bands, or any exercise focused on building muscle.",
+    type: "slider",
+    range: { min: 0, max: 7, step: 1, unit: "days/week" },
+    citations: [
+      {
+        label: "Stamatakis et al., BMJ 2022 — Muscle-strengthening and mortality",
+        url: "https://bjsm.bmj.com/content/56/13/755",
+      },
+      {
+        label: "Liu et al., British Journal of Sports Medicine 2022",
+        url: "https://bjsm.bmj.com/content/56/13/755",
       },
     ],
   },
@@ -90,37 +109,104 @@ export const questions: Question[] = [
     ],
   },
   {
-    id: "diet",
+    id: "vegetables_fruit",
     category: "Diet",
-    text: "How would you describe your diet?",
-    description: "Consider your overall eating pattern over the past year.",
+    text: "How many servings of vegetables and fruit do you eat per day?",
+    description: "One serving is roughly a handful: 1 medium fruit, ½ cup cooked veg, or 1 cup raw leafy greens.",
+    type: "slider",
+    range: { min: 0, max: 10, step: 1, unit: "servings/day" },
+    citations: [
+      {
+        label: "Wang et al., Circulation 2021 — Fruit and vegetable intake and mortality",
+        url: "https://www.ahajournals.org/doi/10.1161/CIRCULATIONAHA.120.048996",
+      },
+      {
+        label: "WHO — Healthy diet: at least 400g (5 portions) per day",
+        url: "https://www.who.int/news-room/fact-sheets/detail/healthy-diet",
+      },
+    ],
+  },
+  {
+    id: "whole_grains",
+    category: "Diet",
+    text: "What type of grains do you mainly eat?",
+    description: "Whole grains include oats, brown rice, whole wheat bread, quinoa, and barley. Refined grains include white bread, white rice, and most pastries.",
     type: "select",
     options: [
-      {
-        value: "mediterranean",
-        label: "Mediterranean / plant-rich",
-        modifier: 2.5,
-      },
-      {
-        value: "balanced",
-        label: "Balanced with fruits & vegetables",
-        modifier: 1,
-      },
-      {
-        value: "average",
-        label: "Average / mixed",
-        modifier: 0,
-      },
-      {
-        value: "poor",
-        label: "High in processed food / fast food",
-        modifier: -3,
-      },
+      { value: "mostly_whole", label: "Mostly whole grains", modifier: 1 },
+      { value: "mixed", label: "Mix of whole and refined", modifier: 0 },
+      { value: "mostly_refined", label: "Mostly refined grains (white bread, white rice)", modifier: -1 },
     ],
     citations: [
       {
-        label: "Sofi et al., BMJ 2008 — Mediterranean Diet and Health Status",
-        url: "https://www.bmj.com/content/337/bmj.a1344",
+        label: "Zong et al., Circulation 2016 — Whole grain intake and cardiovascular disease",
+        url: "https://www.ahajournals.org/doi/10.1161/CIRCULATIONAHA.115.021101",
+      },
+    ],
+  },
+  {
+    id: "protein_source",
+    category: "Diet",
+    text: "What are your main protein sources?",
+    description: "Think about what you eat most often across a typical week.",
+    type: "select",
+    options: [
+      { value: "mostly_plant", label: "Mostly plant-based (legumes, tofu, nuts)", modifier: 1.5 },
+      { value: "fish_seafood", label: "Mostly fish and seafood", modifier: 1 },
+      { value: "mixed", label: "Mixed (poultry, some red meat, some plant)", modifier: 0 },
+      { value: "mostly_poultry", label: "Mostly poultry (chicken, turkey)", modifier: 0 },
+      { value: "mostly_red_meat", label: "Mostly red meat (beef, pork, lamb)", modifier: -1.5 },
+    ],
+    citations: [
+      {
+        label: "Orlich et al., JAMA Internal Medicine 2013 — Vegetarian dietary patterns and mortality",
+        url: "https://jamanetwork.com/journals/jamainternalmedicine/fullarticle/1710093",
+      },
+      {
+        label: "Zheng & Lee, PLOS Medicine 2009 — Red meat and mortality",
+        url: "https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1000032",
+      },
+    ],
+  },
+  {
+    id: "red_meat",
+    category: "Diet",
+    text: "How often do you eat red or processed meat?",
+    description: "Red meat includes beef, pork, lamb, and veal. Processed meat includes bacon, sausages, hot dogs, and deli meats.",
+    type: "select",
+    options: [
+      { value: "rarely", label: "Rarely or never", modifier: 0.5 },
+      { value: "occasional", label: "1–2 times per week", modifier: 0 },
+      { value: "regular", label: "3–4 times per week", modifier: -1 },
+      { value: "daily", label: "Daily or almost daily", modifier: -2 },
+    ],
+    citations: [
+      {
+        label: "WHO IARC — Red meat and processed meat classification",
+        url: "https://www.iarc.who.int/wp-content/uploads/2018/07/pr240_E.pdf",
+      },
+      {
+        label: "Pan et al., Archives of Internal Medicine 2012",
+        url: "https://jamanetwork.com/journals/jamainternalmedicine/fullarticle/1134845",
+      },
+    ],
+  },
+  {
+    id: "processed_food",
+    category: "Diet",
+    text: "How often do you eat ultra-processed foods?",
+    description: "Ultra-processed foods include fast food, packaged snacks, sugary drinks, ready meals, and most breakfast cereals.",
+    type: "select",
+    options: [
+      { value: "rarely", label: "Rarely — less than once a week", modifier: 0.5 },
+      { value: "sometimes", label: "Sometimes — 1–2 times per week", modifier: 0 },
+      { value: "often", label: "Often — 3–5 times per week", modifier: -2 },
+      { value: "daily", label: "Daily or with most meals", modifier: -3.5 },
+    ],
+    citations: [
+      {
+        label: "Srour et al., BMJ 2019 — Ultra-processed food intake and risk of mortality",
+        url: "https://www.bmj.com/content/365/bmj.l1949",
       },
     ],
   },

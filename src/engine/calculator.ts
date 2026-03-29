@@ -7,13 +7,32 @@ import type { Answers, FactorBreakdown, LifespanResult, Suggestion } from "./typ
 // Piecewise-linear interpolation for slider questions
 const sliderCurves: Record<string, [number, number][]> = {
   // [minutes_per_week, modifier_in_years]
-  exercise_minutes: [
+  cardio_minutes: [
     [0, -3],
     [75, -1],
     [150, 0],
     [300, 3],
     [450, 3.8],
     [600, 4],
+  ],
+  // [days_per_week, modifier_in_years]
+  // 2–3 days/week is optimal; daily may increase injury risk
+  strength_days: [
+    [0, -1],
+    [1, 0],
+    [2, 1.5],
+    [3, 2],
+    [5, 2.3],
+    [7, 1.8],
+  ],
+  // [servings_per_day, modifier_in_years]
+  // WHO recommends 5+ servings; benefit plateaus around 7-8
+  vegetables_fruit: [
+    [0, -2],
+    [2, -0.5],
+    [5, 0],
+    [7, 1.5],
+    [10, 2],
   ],
 };
 
@@ -59,7 +78,13 @@ function generateSuggestions(answers: Answers, factors: FactorBreakdown[]): Sugg
 
     // Handle slider questions with special _low key
     if (typeof answerValue === "number") {
-      if (answerValue < 150 && questionSuggestions._low) {
+      const thresholds: Record<string, number> = {
+        cardio_minutes: 150,
+        strength_days: 2,
+        vegetables_fruit: 5,
+      };
+      const threshold = thresholds[factor.questionId];
+      if (threshold !== undefined && answerValue < threshold && questionSuggestions._low) {
         const template = questionSuggestions._low;
         suggestions.push({
           questionId: factor.questionId,
