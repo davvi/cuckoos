@@ -1,6 +1,7 @@
 import { Radio, Select, Slider, Stack, Text, Title } from "@mantine/core";
 import type { Question, RiskEffect, RiskRange } from "../engine/types";
 import { CitationLink } from "./CitationLink";
+import { QuestionInsights } from "./QuestionInsights";
 
 // ── Risk display ─────────────────────────────────────────────────────────────
 
@@ -113,6 +114,8 @@ export function WizardStep({ question, value, onAnswer }: WizardStepProps) {
           />
         </div>
       )}
+
+      <QuestionInsights questionId={question.id} value={value} />
 
       {/* Risk effects — shown as soon as an answer/value is present */}
       {activeRisks.length > 0 && (

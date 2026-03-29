@@ -14,6 +14,10 @@ export const questions: Question[] = [
         label: "WHO Global Health Observatory — Life expectancy at birth",
         url: "https://www.who.int/data/gho/data/indicators/indicator-details/GHO/life-expectancy-at-birth-(years)",
       },
+      {
+        label: "WHO Global health estimates — Leading causes of death",
+        url: "https://www.who.int/data/gho/data/themes/mortality-and-global-health-estimates/ghe-leading-causes-of-death",
+      },
     ],
   },
   {
@@ -45,6 +49,10 @@ export const questions: Question[] = [
       {
         label: "WHO Global Health Observatory — Life expectancy at birth",
         url: "https://www.who.int/data/gho/data/indicators/indicator-details/GHO/life-expectancy-at-birth-(years)",
+      },
+      {
+        label: "WHO Global health estimates — Leading causes of death",
+        url: "https://www.who.int/data/gho/data/themes/mortality-and-global-health-estimates/ghe-leading-causes-of-death",
       },
     ],
   },
