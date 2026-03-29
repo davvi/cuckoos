@@ -1,6 +1,40 @@
 import { Radio, Select, Slider, Stack, Text, Title } from "@mantine/core";
-import type { Question } from "../engine/types";
+import type { Question, RiskEffect, RiskRange } from "../engine/types";
 import { CitationLink } from "./CitationLink";
+
+// ── Risk display ─────────────────────────────────────────────────────────────
+
+function RiskEffectsList({ risks }: { risks: RiskEffect[] }) {
+  if (risks.length === 0) return null;
+  return (
+    <Stack gap={4}>
+      {risks.map((risk, i) => (
+        <Text
+          key={i}
+          size="xs"
+          c={risk.direction === "increases" ? "red.6" : "teal.7"}
+          style={{ display: "flex", alignItems: "baseline", gap: 4 }}
+        >
+          <span style={{ fontWeight: 600 }}>
+            {risk.direction === "increases" ? "↑" : "↓"} {risk.condition}
+          </span>
+          <span style={{ color: "var(--mantine-color-dimmed)" }}>
+            — {risk.magnitude}
+          </span>
+        </Text>
+      ))}
+    </Stack>
+  );
+}
+
+function getSliderRisks(riskRanges: RiskRange[], value: number): RiskEffect[] {
+  for (const range of riskRanges) {
+    if (value <= range.upTo) return range.risks;
+  }
+  return riskRanges[riskRanges.length - 1]?.risks ?? [];
+}
+
+// ── WizardStep ────────────────────────────────────────────────────────────────
 
 interface WizardStepProps {
   question: Question;
@@ -9,6 +43,17 @@ interface WizardStepProps {
 }
 
 export function WizardStep({ question, value, onAnswer }: WizardStepProps) {
+  // Compute which risks to show for the current answer
+  const activeRisks: RiskEffect[] = (() => {
+    if (question.type === "slider" && question.riskRanges && typeof value === "number") {
+      return getSliderRisks(question.riskRanges, value);
+    }
+    if (question.options && value !== undefined) {
+      return question.options.find((o) => o.value === value)?.risks ?? [];
+    }
+    return [];
+  })();
+
   return (
     <Stack gap="lg" py="md">
       <div>
@@ -66,6 +111,21 @@ export function WizardStep({ question, value, onAnswer }: WizardStepProps) {
               { value: question.range.max, label: `${question.range.max}` },
             ]}
           />
+        </div>
+      )}
+
+      {/* Risk effects — shown as soon as an answer/value is present */}
+      {activeRisks.length > 0 && (
+        <div
+          style={{
+            borderLeft: "2px solid var(--mantine-color-gray-3)",
+            paddingLeft: 12,
+          }}
+        >
+          <Text size="xs" c="dimmed" mb={6} tt="uppercase" fw={600} style={{ letterSpacing: "0.05em" }}>
+            Research findings
+          </Text>
+          <RiskEffectsList risks={activeRisks} />
         </div>
       )}
 

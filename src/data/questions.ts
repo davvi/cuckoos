@@ -22,8 +22,24 @@ export const questions: Question[] = [
     text: "What is your biological sex?",
     type: "radio",
     options: [
-      { value: "male", label: "Male", modifier: -2.2 },
-      { value: "female", label: "Female", modifier: 2.2 },
+      {
+        value: "male",
+        label: "Male",
+        modifier: -2.2,
+        risks: [
+          { condition: "Cardiovascular disease", direction: "increases", magnitude: "2× higher risk before age 65" },
+          { condition: "Liver disease", direction: "increases", magnitude: "1.5× higher risk" },
+        ],
+      },
+      {
+        value: "female",
+        label: "Female",
+        modifier: 2.2,
+        risks: [
+          { condition: "Cardiovascular disease", direction: "reduces", magnitude: "Significantly lower risk before menopause" },
+          { condition: "Osteoporosis", direction: "increases", magnitude: "4× higher lifetime risk" },
+        ],
+      },
     ],
     citations: [
       {
@@ -39,11 +55,54 @@ export const questions: Question[] = [
     description: "Smoking is the single largest preventable cause of death worldwide.",
     type: "select",
     options: [
-      { value: "never", label: "Never smoked", modifier: 0 },
-      { value: "former_long", label: "Quit 10+ years ago", modifier: -1 },
-      { value: "former_recent", label: "Quit within last 10 years", modifier: -3 },
-      { value: "light", label: "Light smoker (<10/day)", modifier: -5 },
-      { value: "heavy", label: "Heavy smoker (10+/day)", modifier: -10 },
+      {
+        value: "never",
+        label: "Never smoked",
+        modifier: 0,
+        risks: [
+          { condition: "Lung cancer", direction: "reduces", magnitude: "Lowest possible risk" },
+          { condition: "Cardiovascular disease", direction: "reduces", magnitude: "Lowest smoking-related risk" },
+        ],
+      },
+      {
+        value: "former_long",
+        label: "Quit 10+ years ago",
+        modifier: -1,
+        risks: [
+          { condition: "Lung cancer", direction: "reduces", magnitude: "50% lower risk vs current smokers" },
+          { condition: "Cardiovascular disease", direction: "reduces", magnitude: "Risk approaches non-smoker level after 15 years" },
+        ],
+      },
+      {
+        value: "former_recent",
+        label: "Quit within last 10 years",
+        modifier: -3,
+        risks: [
+          { condition: "Lung cancer", direction: "increases", magnitude: "3–5× higher risk vs never-smokers (decreasing)" },
+          { condition: "Cardiovascular disease", direction: "increases", magnitude: "Elevated risk, improving yearly" },
+        ],
+      },
+      {
+        value: "light",
+        label: "Light smoker (<10/day)",
+        modifier: -5,
+        risks: [
+          { condition: "Lung cancer", direction: "increases", magnitude: "10–15× higher risk vs never-smokers" },
+          { condition: "Cardiovascular disease", direction: "increases", magnitude: "2× higher risk" },
+          { condition: "Stroke", direction: "increases", magnitude: "1.5× higher risk" },
+        ],
+      },
+      {
+        value: "heavy",
+        label: "Heavy smoker (10+/day)",
+        modifier: -10,
+        risks: [
+          { condition: "Lung cancer", direction: "increases", magnitude: "25× higher risk vs never-smokers" },
+          { condition: "Cardiovascular disease", direction: "increases", magnitude: "3× higher risk" },
+          { condition: "COPD", direction: "increases", magnitude: "12× higher risk" },
+          { condition: "Stroke", direction: "increases", magnitude: "2× higher risk" },
+        ],
+      },
     ],
     citations: [
       {
@@ -60,6 +119,45 @@ export const questions: Question[] = [
       "Cardio (aerobic exercise) includes brisk walking, running, cycling, swimming, or anything that sustainably raises your heart rate.",
     type: "slider",
     range: { min: 0, max: 600, step: 15, unit: "min/week" },
+    riskRanges: [
+      {
+        upTo: 0,
+        risks: [
+          { condition: "Cardiovascular disease", direction: "increases", magnitude: "35% higher risk vs active individuals" },
+          { condition: "Type 2 diabetes", direction: "increases", magnitude: "45% higher risk" },
+          { condition: "All-cause mortality", direction: "increases", magnitude: "30% higher risk" },
+        ],
+      },
+      {
+        upTo: 74,
+        risks: [
+          { condition: "Cardiovascular disease", direction: "increases", magnitude: "20% higher risk vs 150 min/week" },
+          { condition: "Type 2 diabetes", direction: "increases", magnitude: "Elevated risk" },
+        ],
+      },
+      {
+        upTo: 149,
+        risks: [
+          { condition: "Cardiovascular disease", direction: "reduces", magnitude: "15% lower risk vs sedentary" },
+        ],
+      },
+      {
+        upTo: 299,
+        risks: [
+          { condition: "Cardiovascular disease", direction: "reduces", magnitude: "35% lower risk" },
+          { condition: "Type 2 diabetes", direction: "reduces", magnitude: "30% lower risk" },
+          { condition: "Depression", direction: "reduces", magnitude: "20% lower risk" },
+        ],
+      },
+      {
+        upTo: 600,
+        risks: [
+          { condition: "Cardiovascular disease", direction: "reduces", magnitude: "40% lower risk" },
+          { condition: "Certain cancers", direction: "reduces", magnitude: "20% lower risk" },
+          { condition: "Stroke", direction: "reduces", magnitude: "27% lower risk" },
+        ],
+      },
+    ],
     citations: [
       {
         label: "Lee et al., JAMA Internal Medicine 2022",
@@ -79,6 +177,37 @@ export const questions: Question[] = [
       "Includes weight lifting, bodyweight exercises (push-ups, squats), resistance bands, or any exercise focused on building muscle.",
     type: "slider",
     range: { min: 0, max: 7, step: 1, unit: "days/week" },
+    riskRanges: [
+      {
+        upTo: 0,
+        risks: [
+          { condition: "Type 2 diabetes", direction: "increases", magnitude: "30% higher risk vs those who train" },
+          { condition: "Metabolic syndrome", direction: "increases", magnitude: "Significantly higher risk" },
+          { condition: "All-cause mortality", direction: "increases", magnitude: "17% higher risk" },
+        ],
+      },
+      {
+        upTo: 1,
+        risks: [
+          { condition: "All-cause mortality", direction: "reduces", magnitude: "Slight reduction vs no training" },
+        ],
+      },
+      {
+        upTo: 4,
+        risks: [
+          { condition: "All-cause mortality", direction: "reduces", magnitude: "17% lower risk" },
+          { condition: "Type 2 diabetes", direction: "reduces", magnitude: "30% lower risk" },
+          { condition: "Cardiovascular disease", direction: "reduces", magnitude: "20% lower risk" },
+        ],
+      },
+      {
+        upTo: 7,
+        risks: [
+          { condition: "All-cause mortality", direction: "reduces", magnitude: "17% lower risk" },
+          { condition: "Injury risk", direction: "increases", magnitude: "Higher with insufficient recovery time" },
+        ],
+      },
+    ],
     citations: [
       {
         label: "Stamatakis et al., BMJ 2022 — Muscle-strengthening and mortality",
@@ -96,10 +225,43 @@ export const questions: Question[] = [
     text: "How many hours of sleep do you typically get per night?",
     type: "select",
     options: [
-      { value: "under5", label: "Less than 5 hours", modifier: -3 },
-      { value: "5to6", label: "5–6 hours", modifier: -1.5 },
-      { value: "7to8", label: "7–8 hours", modifier: 0 },
-      { value: "9plus", label: "9+ hours", modifier: -1 },
+      {
+        value: "under5",
+        label: "Less than 5 hours",
+        modifier: -3,
+        risks: [
+          { condition: "Cardiovascular disease", direction: "increases", magnitude: "45% higher risk" },
+          { condition: "Type 2 diabetes", direction: "increases", magnitude: "33% higher risk" },
+          { condition: "Obesity", direction: "increases", magnitude: "55% higher risk" },
+          { condition: "Cognitive decline", direction: "increases", magnitude: "Significantly higher risk" },
+        ],
+      },
+      {
+        value: "5to6",
+        label: "5–6 hours",
+        modifier: -1.5,
+        risks: [
+          { condition: "Cardiovascular disease", direction: "increases", magnitude: "15% higher risk" },
+          { condition: "Type 2 diabetes", direction: "increases", magnitude: "Modestly elevated risk" },
+        ],
+      },
+      {
+        value: "7to8",
+        label: "7–8 hours",
+        modifier: 0,
+        risks: [
+          { condition: "All-cause mortality", direction: "reduces", magnitude: "Optimal sleep duration — lowest risk" },
+        ],
+      },
+      {
+        value: "9plus",
+        label: "9+ hours",
+        modifier: -1,
+        risks: [
+          { condition: "Cardiovascular disease", direction: "increases", magnitude: "30% higher risk" },
+          { condition: "Depression", direction: "increases", magnitude: "Often associated with or caused by depression" },
+        ],
+      },
     ],
     citations: [
       {
@@ -115,6 +277,38 @@ export const questions: Question[] = [
     description: "One serving is roughly a handful: 1 medium fruit, ½ cup cooked veg, or 1 cup raw leafy greens.",
     type: "slider",
     range: { min: 0, max: 10, step: 1, unit: "servings/day" },
+    riskRanges: [
+      {
+        upTo: 2,
+        risks: [
+          { condition: "Cardiovascular disease", direction: "increases", magnitude: "20% higher risk vs 5 servings/day" },
+          { condition: "Stroke", direction: "increases", magnitude: "16% higher risk" },
+          { condition: "Certain cancers", direction: "increases", magnitude: "12% higher risk" },
+        ],
+      },
+      {
+        upTo: 4,
+        risks: [
+          { condition: "Cardiovascular disease", direction: "increases", magnitude: "Slightly elevated vs WHO-recommended 5 servings" },
+        ],
+      },
+      {
+        upTo: 6,
+        risks: [
+          { condition: "Cardiovascular disease", direction: "reduces", magnitude: "20% lower risk" },
+          { condition: "Stroke", direction: "reduces", magnitude: "16% lower risk" },
+          { condition: "Type 2 diabetes", direction: "reduces", magnitude: "14% lower risk" },
+        ],
+      },
+      {
+        upTo: 10,
+        risks: [
+          { condition: "Cardiovascular disease", direction: "reduces", magnitude: "30% lower risk" },
+          { condition: "Stroke", direction: "reduces", magnitude: "25% lower risk" },
+          { condition: "Certain cancers", direction: "reduces", magnitude: "10–20% lower risk" },
+        ],
+      },
+    ],
     citations: [
       {
         label: "Wang et al., Circulation 2021 — Fruit and vegetable intake and mortality",
@@ -133,9 +327,34 @@ export const questions: Question[] = [
     description: "Whole grains include oats, brown rice, whole wheat bread, quinoa, and barley. Refined grains include white bread, white rice, and most pastries.",
     type: "select",
     options: [
-      { value: "mostly_whole", label: "Mostly whole grains", modifier: 1 },
-      { value: "mixed", label: "Mix of whole and refined", modifier: 0 },
-      { value: "mostly_refined", label: "Mostly refined grains (white bread, white rice)", modifier: -1 },
+      {
+        value: "mostly_whole",
+        label: "Mostly whole grains",
+        modifier: 1,
+        risks: [
+          { condition: "Cardiovascular disease", direction: "reduces", magnitude: "20% lower risk" },
+          { condition: "Type 2 diabetes", direction: "reduces", magnitude: "30% lower risk" },
+          { condition: "Colorectal cancer", direction: "reduces", magnitude: "17% lower risk" },
+        ],
+      },
+      {
+        value: "mixed",
+        label: "Mix of whole and refined",
+        modifier: 0,
+        risks: [
+          { condition: "Cardiovascular disease", direction: "reduces", magnitude: "Partial benefit vs mostly refined" },
+        ],
+      },
+      {
+        value: "mostly_refined",
+        label: "Mostly refined grains (white bread, white rice)",
+        modifier: -1,
+        risks: [
+          { condition: "Type 2 diabetes", direction: "increases", magnitude: "20% higher risk vs whole grains" },
+          { condition: "Cardiovascular disease", direction: "increases", magnitude: "Elevated risk" },
+          { condition: "Colorectal cancer", direction: "increases", magnitude: "Higher risk vs whole grains" },
+        ],
+      },
     ],
     citations: [
       {
@@ -151,11 +370,50 @@ export const questions: Question[] = [
     description: "Think about what you eat most often across a typical week.",
     type: "select",
     options: [
-      { value: "mostly_plant", label: "Mostly plant-based (legumes, tofu, nuts)", modifier: 1.5 },
-      { value: "fish_seafood", label: "Mostly fish and seafood", modifier: 1 },
-      { value: "mixed", label: "Mixed (poultry, some red meat, some plant)", modifier: 0 },
-      { value: "mostly_poultry", label: "Mostly poultry (chicken, turkey)", modifier: 0 },
-      { value: "mostly_red_meat", label: "Mostly red meat (beef, pork, lamb)", modifier: -1.5 },
+      {
+        value: "mostly_plant",
+        label: "Mostly plant-based (legumes, tofu, nuts)",
+        modifier: 1.5,
+        risks: [
+          { condition: "Colorectal cancer", direction: "reduces", magnitude: "22% lower risk vs red-meat diets" },
+          { condition: "Cardiovascular disease", direction: "reduces", magnitude: "15% lower risk" },
+          { condition: "Type 2 diabetes", direction: "reduces", magnitude: "Lower risk" },
+        ],
+      },
+      {
+        value: "fish_seafood",
+        label: "Mostly fish and seafood",
+        modifier: 1,
+        risks: [
+          { condition: "Cardiovascular disease", direction: "reduces", magnitude: "20% lower risk (omega-3 benefit)" },
+          { condition: "Depression", direction: "reduces", magnitude: "Associated with lower rates" },
+          { condition: "Cognitive decline", direction: "reduces", magnitude: "Lower risk" },
+        ],
+      },
+      {
+        value: "mixed",
+        label: "Mixed (poultry, some red meat, some plant)",
+        modifier: 0,
+        risks: [],
+      },
+      {
+        value: "mostly_poultry",
+        label: "Mostly poultry (chicken, turkey)",
+        modifier: 0,
+        risks: [
+          { condition: "Cardiovascular disease", direction: "reduces", magnitude: "Lower risk vs red meat" },
+        ],
+      },
+      {
+        value: "mostly_red_meat",
+        label: "Mostly red meat (beef, pork, lamb)",
+        modifier: -1.5,
+        risks: [
+          { condition: "Colorectal cancer", direction: "increases", magnitude: "25% higher risk per 100g/day" },
+          { condition: "Cardiovascular disease", direction: "increases", magnitude: "15% higher risk" },
+          { condition: "Type 2 diabetes", direction: "increases", magnitude: "Elevated risk" },
+        ],
+      },
     ],
     citations: [
       {
@@ -175,10 +433,40 @@ export const questions: Question[] = [
     description: "Red meat includes beef, pork, lamb, and veal. Processed meat includes bacon, sausages, hot dogs, and deli meats.",
     type: "select",
     options: [
-      { value: "rarely", label: "Rarely or never", modifier: 0.5 },
-      { value: "occasional", label: "1–2 times per week", modifier: 0 },
-      { value: "regular", label: "3–4 times per week", modifier: -1 },
-      { value: "daily", label: "Daily or almost daily", modifier: -2 },
+      {
+        value: "rarely",
+        label: "Rarely or never",
+        modifier: 0.5,
+        risks: [
+          { condition: "Colorectal cancer", direction: "reduces", magnitude: "Lowest risk group" },
+          { condition: "Cardiovascular disease", direction: "reduces", magnitude: "Lower risk" },
+        ],
+      },
+      {
+        value: "occasional",
+        label: "1–2 times per week",
+        modifier: 0,
+        risks: [],
+      },
+      {
+        value: "regular",
+        label: "3–4 times per week",
+        modifier: -1,
+        risks: [
+          { condition: "Colorectal cancer", direction: "increases", magnitude: "18% higher risk per additional 50g processed meat/day" },
+          { condition: "Cardiovascular disease", direction: "increases", magnitude: "Elevated risk" },
+        ],
+      },
+      {
+        value: "daily",
+        label: "Daily or almost daily",
+        modifier: -2,
+        risks: [
+          { condition: "Colorectal cancer", direction: "increases", magnitude: "28% higher risk (WHO Group 2A carcinogen)" },
+          { condition: "Cardiovascular disease", direction: "increases", magnitude: "22% higher risk" },
+          { condition: "Type 2 diabetes", direction: "increases", magnitude: "Elevated risk" },
+        ],
+      },
     ],
     citations: [
       {
@@ -198,10 +486,42 @@ export const questions: Question[] = [
     description: "Ultra-processed foods include fast food, packaged snacks, sugary drinks, ready meals, and most breakfast cereals.",
     type: "select",
     options: [
-      { value: "rarely", label: "Rarely — less than once a week", modifier: 0.5 },
-      { value: "sometimes", label: "Sometimes — 1–2 times per week", modifier: 0 },
-      { value: "often", label: "Often — 3–5 times per week", modifier: -2 },
-      { value: "daily", label: "Daily or with most meals", modifier: -3.5 },
+      {
+        value: "rarely",
+        label: "Rarely — less than once a week",
+        modifier: 0.5,
+        risks: [
+          { condition: "Obesity", direction: "reduces", magnitude: "Lower risk" },
+          { condition: "Type 2 diabetes", direction: "reduces", magnitude: "Lower risk" },
+        ],
+      },
+      {
+        value: "sometimes",
+        label: "Sometimes — 1–2 times per week",
+        modifier: 0,
+        risks: [],
+      },
+      {
+        value: "often",
+        label: "Often — 3–5 times per week",
+        modifier: -2,
+        risks: [
+          { condition: "All-cause mortality", direction: "increases", magnitude: "12% higher risk per 10% increase in UPF intake" },
+          { condition: "Obesity", direction: "increases", magnitude: "Significantly elevated risk" },
+          { condition: "Cardiovascular disease", direction: "increases", magnitude: "Elevated risk" },
+        ],
+      },
+      {
+        value: "daily",
+        label: "Daily or with most meals",
+        modifier: -3.5,
+        risks: [
+          { condition: "All-cause mortality", direction: "increases", magnitude: "Substantially elevated risk" },
+          { condition: "Obesity", direction: "increases", magnitude: "55% higher risk" },
+          { condition: "Type 2 diabetes", direction: "increases", magnitude: "30% higher risk" },
+          { condition: "Certain cancers", direction: "increases", magnitude: "14% higher risk" },
+        ],
+      },
     ],
     citations: [
       {
@@ -216,9 +536,35 @@ export const questions: Question[] = [
     text: "How much alcohol do you consume?",
     type: "select",
     options: [
-      { value: "none", label: "None", modifier: 0 },
-      { value: "moderate", label: "1–2 drinks/day", modifier: -0.5 },
-      { value: "heavy", label: "3+ drinks/day", modifier: -5 },
+      {
+        value: "none",
+        label: "None",
+        modifier: 0,
+        risks: [
+          { condition: "Liver disease", direction: "reduces", magnitude: "Lowest risk" },
+          { condition: "Alcohol-related cancers", direction: "reduces", magnitude: "Lowest risk" },
+        ],
+      },
+      {
+        value: "moderate",
+        label: "1–2 drinks/day",
+        modifier: -0.5,
+        risks: [
+          { condition: "Breast cancer", direction: "increases", magnitude: "7–10% higher risk per drink/day" },
+          { condition: "Liver disease", direction: "increases", magnitude: "Modestly elevated risk" },
+        ],
+      },
+      {
+        value: "heavy",
+        label: "3+ drinks/day",
+        modifier: -5,
+        risks: [
+          { condition: "Liver cirrhosis", direction: "increases", magnitude: "7× higher risk" },
+          { condition: "Oral and esophageal cancer", direction: "increases", magnitude: "3× higher risk" },
+          { condition: "Cardiovascular disease", direction: "increases", magnitude: "2× higher risk" },
+          { condition: "Pancreatitis", direction: "increases", magnitude: "Significantly higher risk" },
+        ],
+      },
     ],
     citations: [
       {
@@ -234,10 +580,45 @@ export const questions: Question[] = [
     description: "BMI = weight (kg) / height (m)². A rough guide: 5'9\" / 170 lbs ≈ 25 BMI.",
     type: "select",
     options: [
-      { value: "underweight", label: "Under 18.5 (underweight)", modifier: -2 },
-      { value: "normal", label: "18.5–24.9 (normal)", modifier: 0 },
-      { value: "overweight", label: "25–29.9 (overweight)", modifier: -1.5 },
-      { value: "obese", label: "30+ (obese)", modifier: -4 },
+      {
+        value: "underweight",
+        label: "Under 18.5 (underweight)",
+        modifier: -2,
+        risks: [
+          { condition: "Respiratory disease", direction: "increases", magnitude: "3× higher risk" },
+          { condition: "Bone fractures", direction: "increases", magnitude: "Higher risk due to low bone density" },
+          { condition: "Immune dysfunction", direction: "increases", magnitude: "Higher susceptibility to infections" },
+        ],
+      },
+      {
+        value: "normal",
+        label: "18.5–24.9 (normal)",
+        modifier: 0,
+        risks: [
+          { condition: "All-cause mortality", direction: "reduces", magnitude: "Optimal BMI range — lowest risk" },
+        ],
+      },
+      {
+        value: "overweight",
+        label: "25–29.9 (overweight)",
+        modifier: -1.5,
+        risks: [
+          { condition: "Type 2 diabetes", direction: "increases", magnitude: "2× higher risk vs normal BMI" },
+          { condition: "Cardiovascular disease", direction: "increases", magnitude: "Elevated risk" },
+          { condition: "Sleep apnea", direction: "increases", magnitude: "Higher risk" },
+        ],
+      },
+      {
+        value: "obese",
+        label: "30+ (obese)",
+        modifier: -4,
+        risks: [
+          { condition: "Type 2 diabetes", direction: "increases", magnitude: "7× higher risk vs normal BMI" },
+          { condition: "Cardiovascular disease", direction: "increases", magnitude: "2× higher risk" },
+          { condition: "Certain cancers", direction: "increases", magnitude: "30% higher risk" },
+          { condition: "Sleep apnea", direction: "increases", magnitude: "Strongly associated" },
+        ],
+      },
     ],
     citations: [
       {
@@ -253,9 +634,35 @@ export const questions: Question[] = [
     description: "Consider close relationships, community involvement, and social support.",
     type: "radio",
     options: [
-      { value: "strong", label: "Strong — regular close relationships", modifier: 2 },
-      { value: "moderate", label: "Moderate — some close friends", modifier: 0.5 },
-      { value: "weak", label: "Weak — mostly isolated", modifier: -3 },
+      {
+        value: "strong",
+        label: "Strong — regular close relationships",
+        modifier: 2,
+        risks: [
+          { condition: "Premature death", direction: "reduces", magnitude: "50% higher survival odds vs weak social ties" },
+          { condition: "Dementia", direction: "reduces", magnitude: "Significantly lower risk" },
+          { condition: "Depression", direction: "reduces", magnitude: "Substantially lower risk" },
+        ],
+      },
+      {
+        value: "moderate",
+        label: "Moderate — some close friends",
+        modifier: 0.5,
+        risks: [
+          { condition: "Premature death", direction: "reduces", magnitude: "Partial protective benefit" },
+        ],
+      },
+      {
+        value: "weak",
+        label: "Weak — mostly isolated",
+        modifier: -3,
+        risks: [
+          { condition: "Premature death", direction: "increases", magnitude: "Equivalent to smoking 15 cigarettes/day" },
+          { condition: "Dementia", direction: "increases", magnitude: "50% higher risk" },
+          { condition: "Depression", direction: "increases", magnitude: "3× higher risk" },
+          { condition: "Cardiovascular disease", direction: "increases", magnitude: "Elevated risk" },
+        ],
+      },
     ],
     citations: [
       {
@@ -270,9 +677,32 @@ export const questions: Question[] = [
     text: "How would you rate your chronic stress level?",
     type: "radio",
     options: [
-      { value: "low", label: "Low — rarely stressed", modifier: 1 },
-      { value: "moderate", label: "Moderate — sometimes stressed", modifier: 0 },
-      { value: "high", label: "High — frequently stressed", modifier: -2.5 },
+      {
+        value: "low",
+        label: "Low — rarely stressed",
+        modifier: 1,
+        risks: [
+          { condition: "Cardiovascular disease", direction: "reduces", magnitude: "40% lower risk vs high-stress individuals" },
+          { condition: "Depression", direction: "reduces", magnitude: "Substantially lower risk" },
+        ],
+      },
+      {
+        value: "moderate",
+        label: "Moderate — sometimes stressed",
+        modifier: 0,
+        risks: [],
+      },
+      {
+        value: "high",
+        label: "High — frequently stressed",
+        modifier: -2.5,
+        risks: [
+          { condition: "Cardiovascular disease", direction: "increases", magnitude: "2× higher risk" },
+          { condition: "Depression", direction: "increases", magnitude: "3× higher risk" },
+          { condition: "Immune dysfunction", direction: "increases", magnitude: "Chronic stress impairs immune response" },
+          { condition: "Stroke", direction: "increases", magnitude: "Elevated risk" },
+        ],
+      },
     ],
     citations: [
       {

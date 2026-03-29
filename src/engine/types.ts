@@ -3,10 +3,23 @@ export interface Citation {
   url: string;
 }
 
+export interface RiskEffect {
+  condition: string;       // e.g. "Lung cancer", "Cardiovascular disease"
+  direction: "increases" | "reduces";
+  magnitude: string;       // e.g. "25× higher risk", "35% lower risk"
+  citation?: Citation;
+}
+
+export interface RiskRange {
+  upTo: number;            // applies when slider value <= upTo
+  risks: RiskEffect[];
+}
+
 export interface Option {
   value: string;
   label: string;
   modifier: number;
+  risks?: RiskEffect[];
 }
 
 export interface Question {
@@ -17,6 +30,7 @@ export interface Question {
   type: "select" | "slider" | "radio";
   options?: Option[];
   range?: { min: number; max: number; step: number; unit: string };
+  riskRanges?: RiskRange[];   // for slider questions
   citations?: Citation[];
 }
 
