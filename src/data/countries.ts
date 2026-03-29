@@ -10,6 +10,7 @@ export const countryData: Record<string, CountryData> = {
   Albania: { lifespan: 78.5 },
   Algeria: { lifespan: 77.1 },
   Argentina: { lifespan: 76.5 },
+  Armenia: { lifespan: 75.1 },
   Australia: { lifespan: 83.2 },
   Austria: { lifespan: 81.5 },
   Bangladesh: { lifespan: 73.3 },
