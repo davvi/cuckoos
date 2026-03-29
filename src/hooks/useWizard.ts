@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { useLocalStorage } from "@mantine/hooks";
-import type { Answers } from "../engine/types";
+import type { AnswerValue, Answers } from "../engine/types";
 import { questions } from "../data/questions";
 
 const STORAGE_KEY_ANSWERS = "cuckoos-answers";
@@ -28,7 +28,7 @@ export function useWizard() {
   );
 
   const setAnswer = useCallback(
-    (questionId: string, value: string | number) => {
+    (questionId: string, value: AnswerValue) => {
       setAnswers((prev) => ({ ...prev, [questionId]: value }));
     },
     [setAnswers],

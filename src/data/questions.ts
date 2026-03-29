@@ -1,6 +1,13 @@
 import type { Question } from "../engine/types";
 import { countryOptions } from "./countries";
 
+const proteinFrequencyOptions = [
+  { value: "rarely", label: "Rarely or never" },
+  { value: "occasional", label: "1–2 times per week" },
+  { value: "regular", label: "3–4 times per week" },
+  { value: "daily", label: "Daily or almost daily" },
+] as const;
+
 export const questions: Question[] = [
   {
     id: "country",
@@ -372,54 +379,47 @@ export const questions: Question[] = [
     ],
   },
   {
-    id: "protein_source",
+    id: "plant_protein",
     category: "Diet",
-    text: "What are your main protein sources?",
-    description: "Think about what you eat most often across a typical week.",
+    text: "How often do you eat plant proteins?",
+    description: "Plant proteins include beans, lentils, chickpeas, tofu, tempeh, nuts, and seeds.",
     type: "select",
     options: [
       {
-        value: "mostly_plant",
-        label: "Mostly plant-based (legumes, tofu, nuts)",
-        modifier: 1.5,
+        value: proteinFrequencyOptions[0].value,
+        label: proteinFrequencyOptions[0].label,
+        modifier: 0,
         risks: [
-          { condition: "Colorectal cancer", direction: "reduces", magnitude: "22% lower risk vs red-meat diets" },
-          { condition: "Cardiovascular disease", direction: "reduces", magnitude: "15% lower risk" },
+          { condition: "Cardiovascular disease", direction: "reduces", magnitude: "Less protective benefit from fiber-rich protein sources" },
+        ],
+      },
+      {
+        value: proteinFrequencyOptions[1].value,
+        label: proteinFrequencyOptions[1].label,
+        modifier: 0.4,
+        risks: [
+          { condition: "Cardiovascular disease", direction: "reduces", magnitude: "Modest benefit vs low intake" },
+          { condition: "Type 2 diabetes", direction: "reduces", magnitude: "Modest improvement in dietary quality" },
+        ],
+      },
+      {
+        value: proteinFrequencyOptions[2].value,
+        label: proteinFrequencyOptions[2].label,
+        modifier: 0.9,
+        risks: [
+          { condition: "Colorectal cancer", direction: "reduces", magnitude: "Lower risk when replacing red meat" },
+          { condition: "Cardiovascular disease", direction: "reduces", magnitude: "Clear benefit from higher-fiber protein intake" },
           { condition: "Type 2 diabetes", direction: "reduces", magnitude: "Lower risk" },
         ],
       },
       {
-        value: "fish_seafood",
-        label: "Mostly fish and seafood",
-        modifier: 1,
+        value: proteinFrequencyOptions[3].value,
+        label: proteinFrequencyOptions[3].label,
+        modifier: 1.3,
         risks: [
-          { condition: "Cardiovascular disease", direction: "reduces", magnitude: "20% lower risk (omega-3 benefit)" },
-          { condition: "Depression", direction: "reduces", magnitude: "Associated with lower rates" },
-          { condition: "Cognitive decline", direction: "reduces", magnitude: "Lower risk" },
-        ],
-      },
-      {
-        value: "mixed",
-        label: "Mixed (poultry, some red meat, some plant)",
-        modifier: 0,
-        risks: [],
-      },
-      {
-        value: "mostly_poultry",
-        label: "Mostly poultry (chicken, turkey)",
-        modifier: 0,
-        risks: [
-          { condition: "Cardiovascular disease", direction: "reduces", magnitude: "Lower risk vs red meat" },
-        ],
-      },
-      {
-        value: "mostly_red_meat",
-        label: "Mostly red meat (beef, pork, lamb)",
-        modifier: -1.5,
-        risks: [
-          { condition: "Colorectal cancer", direction: "increases", magnitude: "25% higher risk per 100g/day" },
-          { condition: "Cardiovascular disease", direction: "increases", magnitude: "15% higher risk" },
-          { condition: "Type 2 diabetes", direction: "increases", magnitude: "Elevated risk" },
+          { condition: "Colorectal cancer", direction: "reduces", magnitude: "Lower risk when plant proteins displace processed or red meat" },
+          { condition: "Cardiovascular disease", direction: "reduces", magnitude: "Strong protective dietary pattern signal" },
+          { condition: "Type 2 diabetes", direction: "reduces", magnitude: "Lower risk" },
         ],
       },
     ],
@@ -429,8 +429,105 @@ export const questions: Question[] = [
         url: "https://jamanetwork.com/journals/jamainternalmedicine/fullarticle/1710093",
       },
       {
-        label: "Zheng & Lee, PLOS Medicine 2009 — Red meat and mortality",
-        url: "https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1000032",
+        label: "BMC Medicine 2023 — Substituting animal foods with plant foods and mortality risk",
+        url: "https://bmcmedicine.biomedcentral.com/articles/10.1186/s12916-023-03143-5",
+      },
+    ],
+  },
+  {
+    id: "fish_intake",
+    category: "Diet",
+    text: "How often do you eat fish or seafood?",
+    description: "Includes oily fish, white fish, shellfish, and other seafood.",
+    type: "select",
+    options: [
+      {
+        value: proteinFrequencyOptions[0].value,
+        label: proteinFrequencyOptions[0].label,
+        modifier: 0,
+        risks: [],
+      },
+      {
+        value: proteinFrequencyOptions[1].value,
+        label: proteinFrequencyOptions[1].label,
+        modifier: 0.5,
+        risks: [
+          { condition: "Cardiovascular disease", direction: "reduces", magnitude: "Meaningful benefit from omega-3-rich intake" },
+          { condition: "Stroke", direction: "reduces", magnitude: "Lower risk vs very low intake" },
+        ],
+      },
+      {
+        value: proteinFrequencyOptions[2].value,
+        label: proteinFrequencyOptions[2].label,
+        modifier: 0.9,
+        risks: [
+          { condition: "Cardiovascular disease", direction: "reduces", magnitude: "Lower risk (omega-3 benefit)" },
+          { condition: "Depression", direction: "reduces", magnitude: "Associated with lower rates" },
+          { condition: "Cognitive decline", direction: "reduces", magnitude: "Lower risk" },
+        ],
+      },
+      {
+        value: proteinFrequencyOptions[3].value,
+        label: proteinFrequencyOptions[3].label,
+        modifier: 1.1,
+        risks: [
+          { condition: "Cardiovascular disease", direction: "reduces", magnitude: "Sustained omega-3-related benefit" },
+          { condition: "Stroke", direction: "reduces", magnitude: "Lower risk" },
+          { condition: "Cognitive decline", direction: "reduces", magnitude: "Lower risk" },
+        ],
+      },
+    ],
+    citations: [
+      {
+        label: "British Journal of Nutrition 2022 — Replacing red meat with poultry or fish and mortality",
+        url: "https://pubmed.ncbi.nlm.nih.gov/33829978/",
+      },
+    ],
+  },
+  {
+    id: "poultry_intake",
+    category: "Diet",
+    text: "How often do you eat poultry?",
+    description: "Includes chicken, turkey, and other poultry.",
+    type: "select",
+    options: [
+      {
+        value: proteinFrequencyOptions[0].value,
+        label: proteinFrequencyOptions[0].label,
+        modifier: 0,
+        risks: [],
+      },
+      {
+        value: proteinFrequencyOptions[1].value,
+        label: proteinFrequencyOptions[1].label,
+        modifier: 0.1,
+        risks: [
+          { condition: "Cardiovascular disease", direction: "reduces", magnitude: "Slightly lower risk vs higher red meat intake" },
+        ],
+      },
+      {
+        value: proteinFrequencyOptions[2].value,
+        label: proteinFrequencyOptions[2].label,
+        modifier: 0.3,
+        risks: [
+          { condition: "Cardiovascular disease", direction: "reduces", magnitude: "Lower risk when replacing some red meat" },
+          { condition: "All-cause mortality", direction: "reduces", magnitude: "Generally lower risk than higher red meat patterns" },
+        ],
+      },
+      {
+        value: proteinFrequencyOptions[3].value,
+        label: proteinFrequencyOptions[3].label,
+        modifier: 0.4,
+        risks: [
+          { condition: "Cardiovascular disease", direction: "reduces", magnitude: "Lower risk vs red meat-heavy patterns" },
+          { condition: "All-cause mortality", direction: "reduces", magnitude: "Lower risk when used instead of red meat" },
+        ],
+      },
+    ],
+    citations: [
+      {
+        label: "British Journal of Nutrition 2022 — Replacing red meat with poultry or fish and mortality",
+        url: "https://pubmed.ncbi.nlm.nih.gov/33829978/",
       },
     ],
   },

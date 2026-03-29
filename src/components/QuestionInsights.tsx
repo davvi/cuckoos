@@ -1,6 +1,7 @@
 import { Card, Divider, Group, List, SimpleGrid, Stack, Text, ThemeIcon } from "@mantine/core";
 import { countryData } from "../data/countries";
 import { sexInsights } from "../data/sexInsights";
+import type { AnswerValue } from "../engine/types";
 
 function fmt(n: number, decimals = 1) {
   return n.toLocaleString("en-US", {
@@ -95,7 +96,7 @@ export function QuestionInsights({
   value,
 }: {
   questionId: string;
-  value: string | number | undefined;
+  value: AnswerValue | undefined;
 }) {
   if (questionId === "country" && typeof value === "string") {
     const data = countryData[value];

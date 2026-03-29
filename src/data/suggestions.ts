@@ -63,14 +63,26 @@ export const suggestionMap: Record<string, Record<string, SuggestionTemplate>> =
       ],
     },
   },
-  protein_source: {
-    mostly_red_meat: {
-      text: "Replacing red meat with plant proteins (legumes, nuts), fish, or poultry is one of the most evidence-backed dietary changes for longevity.",
-      potentialGain: 2.5,
+  plant_protein: {
+    rarely: {
+      text: "Adding beans, lentils, tofu, nuts, or seeds a few times per week can improve dietary quality and meaningfully reduce long-term cardiometabolic risk.",
+      potentialGain: 1,
       citations: [
         {
           label: "Orlich et al., JAMA Internal Medicine 2013",
           url: "https://jamanetwork.com/journals/jamainternalmedicine/fullarticle/1710093",
+        },
+      ],
+    },
+  },
+  fish_intake: {
+    rarely: {
+      text: "Adding fish or seafood 1–2 times per week is associated with better cardiovascular outcomes than eating it rarely.",
+      potentialGain: 0.8,
+      citations: [
+        {
+          label: "British Journal of Nutrition 2022",
+          url: "https://pubmed.ncbi.nlm.nih.gov/33829978/",
         },
       ],
     },
@@ -87,12 +99,12 @@ export const suggestionMap: Record<string, Record<string, SuggestionTemplate>> =
       ],
     },
     daily: {
-      text: "Daily red or processed meat consumption is strongly linked to higher cancer and heart disease risk. Reducing to occasional (1–2x/week) can meaningfully extend your life.",
-      potentialGain: 1.5,
+      text: "Daily red or processed meat consumption is strongly linked to higher cancer and heart disease risk. Replacing some of it with plant protein, fish, or poultry can meaningfully improve your outlook.",
+      potentialGain: 2.5,
       citations: [
         {
-          label: "WHO IARC — Processed meat classified as Group 1 carcinogen",
-          url: "https://www.iarc.who.int/wp-content/uploads/2018/07/pr240_E.pdf",
+          label: "British Journal of Nutrition 2022",
+          url: "https://pubmed.ncbi.nlm.nih.gov/33829978/",
         },
       ],
     },

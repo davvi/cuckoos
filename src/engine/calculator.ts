@@ -117,12 +117,12 @@ function generateSuggestions(answers: Answers, factors: FactorBreakdown[]): Sugg
   const suggestions: Suggestion[] = [];
 
   for (const factor of factors) {
-    if (factor.modifier >= 0) continue;
-
     const answerValue = answers[factor.questionId];
     const questionSuggestions = suggestionMap[factor.questionId];
 
-    if (!questionSuggestions) continue;
+    if (!questionSuggestions || answerValue === undefined) continue;
+
+    if (factor.modifier >= 0) continue;
 
     // Handle slider questions with special _low key
     if (typeof answerValue === "number") {

@@ -1,5 +1,5 @@
 import { Radio, Select, Slider, Stack, Text, Title } from "@mantine/core";
-import type { Question, RiskEffect, RiskRange } from "../engine/types";
+import type { AnswerValue, Question, RiskEffect, RiskRange } from "../engine/types";
 import { CitationLink } from "./CitationLink";
 import { QuestionInsights } from "./QuestionInsights";
 
@@ -39,8 +39,8 @@ function getSliderRisks(riskRanges: RiskRange[], value: number): RiskEffect[] {
 
 interface WizardStepProps {
   question: Question;
-  value: string | number | undefined;
-  onAnswer: (value: string | number) => void;
+  value: AnswerValue | undefined;
+  onAnswer: (value: AnswerValue) => void;
 }
 
 export function WizardStep({ question, value, onAnswer }: WizardStepProps) {

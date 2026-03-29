@@ -22,6 +22,8 @@ export interface Option {
   risks?: RiskEffect[];
 }
 
+export type AnswerValue = string | number;
+
 export interface Question {
   id: string;
   category: string;
@@ -34,7 +36,7 @@ export interface Question {
   citations?: Citation[];
 }
 
-export type Answers = Record<string, string | number>;
+export type Answers = Record<string, AnswerValue>;
 
 export interface FactorBreakdown {
   questionId: string;
